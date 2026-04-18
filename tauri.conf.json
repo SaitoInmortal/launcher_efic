@@ -1,0 +1,48 @@
+{
+  "build": {
+    "beforeBuildCommand": "",
+    "beforeDevCommand": "",
+    "devPath": "../src",
+    "distDir": "../src"
+  },
+  "package": {
+    "productName": "MC Launcher Rust",
+    "version": "0.1.0"
+  },
+  "tauri": {
+    "allowlist": {
+      "all": true
+    },
+    "bundle": {
+      "active": true,
+      "category": "DeveloperTool",
+      "copyright": "",
+      "externalBin": [],
+      "icon": [
+        "icons/32x32.png",
+        "icons/128x128.png"
+      ],
+      "identifier": "com.mclauncher.rust",
+      "longDescription": "",
+      "publisher": "",
+      "resources": [],
+      "shortDescription": "",
+      "targets": "all"
+    },
+    "security": {
+      "csp": null
+    },
+    "updater": {
+      "active": false
+    },
+    "windows": [
+      {
+        "fullscreen": false,
+        "resizable": true,
+        "title": "MC Launcher No-Premium",
+        "width": 800,
+        "height": 600
+      }
+    ]
+  }
+}

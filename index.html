@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Launcher</title>
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #1a1a1a; color: white; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+    .container { background-color: #2a2a2a; padding: 2rem; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); width: 350px; text-align: center; }
+    input { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #444; background: #333; color: white; box-sizing: border-box; }
+    button { width: 100%; padding: 10px; border: none; border-radius: 5px; background-color: #388e3c; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; }
+    button:hover { background-color: #45a049; }
+    .status { margin-top: 1rem; font-size: 0.8rem; color: #aaa; }
+    .version-info { font-size: 0.7rem; color: #666; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>MC Launcher Rust</h2>
+    <div id="version-tag" class="version-info">Buscando actualizaciones...</div>
+    
+    <input type="text" id="username" placeholder="Nombre de usuario" />
+    <input type="text" id="mc-version" placeholder="Versión (ej: 1.20.1)" value="1.20.1" />
+    
+    <button id="launch-btn">JUGAR</button>
+    
+    <div id="status-msg" class="status"></div>
+  </div>
+
+  <script>
+    const { invoke } = window.__TAURI__.tauri;
+
+    const statusMsg = document.getElementById('status-msg');
+    const versionTag = document.getElementById('version-tag');
+    const launchBtn = document.getElementById('launch-btn');
+
+    // Comprobar actualizaciones al cargar
+    async function checkUpdates() {
+      try {
+        const latest = await invoke('check_github_updates');
+        versionTag.innerText = `Última versión disponible en GitHub: ${latest}`;
+      } catch (err) {
+        versionTag.innerText = "No se pudo comprobar la versión remota.";
+      }
+    }
+
+    launchBtn.addEventListener('click', async () => {
+      const username = document.getElementById('username').value;
+      const version = document.getElementById('mc-version').value;
+      
+      statusMsg.innerText = "Lanzando el juego...";
+      launchBtn.disabled = true;
+
+      try {
+        const response = await invoke('launch_minecraft', { username, version });
+        statusMsg.style.color = "#81c784";
+        statusMsg.innerText = response;
+      } catch (err) {
+        statusMsg.style.color = "#e57373";
+        statusMsg.innerText = "Error: " + err;
+        launchBtn.disabled = false;
+      }
+    });
+
+    checkUpdates();
+  </script>
+</body>
+</html>
