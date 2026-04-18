@@ -1,20 +1,85 @@
+# Información del Paquete
 [package]
+# Nombre del proyecto del launcher de Minecraft
 name = "minecraft-launcher-rust"
+# Versión inicial del proyecto
 version = "0.1.0"
+# Edición de Rust utilizada (2021 es la más reciente y recomendada)
 edition = "2021"
 
+# Dependencias para compilación y construcción del proyecto
 [build-dependencies]
+# tauri-build: Herramienta de construcción para Tauri
+# Se utiliza durante el proceso de compilación para generar código necesario
+# para que Tauri funcione correctamente
 tauri-build = "2.1"
 
+# Dependencias del proyecto en tiempo de ejecución
 [dependencies]
+
+# ════════════════════════════════════════════════════════════════
+# Framework Desktop Multiplataforma
+# ════════════════════════════════════════════════════════════════
+# tauri (v2.1): Framework desktop multiplataforma
+# - Alternativa moderna a Electron para crear aplicaciones desktop
+# - Utiliza web technologies (HTML/CSS/JS) para la interfaz gráfica
+# - api-all: Habilita acceso a todas las APIs de Tauri (archivos, ventanas, etc.)
+# - shell-open: Permite abrir URLs y archivos en el navegador/aplicación predeterminada
 tauri = { version = "2.1", features = ["api-all", "shell-open"] }
+
+# ════════════════════════════════════════════════════════════════
+# Serialización y Deserialización de Datos
+# ════════════════════════════════════════════════════════════════
+# serde (v1.0): Framework de serialización/deserialización más popular en Rust
+# - Convierte estructuras Rust a/desde JSON, YAML, XML, MessagePack, etc.
+# - derive: Permite usar macros #[derive] para generar automáticamente código
+# - Usado para procesar datos del launcher, perfiles, configuraciones
 serde = { version = "1.0", features = ["derive"] }
+
+# serde_json (v1.0): Soporte específico para formato JSON con serde
+# - Serializa y deserializa datos en formato JSON
+# - Esencial para comunicación entre frontend (web) y backend (Rust)
+# - Usado para APIs, configuración, guardar estado del launcher
 serde_json = "1.0"
+
+# ════════════════════════════════════════════════════════════════
+# Cliente HTTP Asincrónico
+# ════════════════════════════════════════════════════════════════
+# reqwest (v0.12): Cliente HTTP/HTTPS asincrónico de alto nivel
+# - Realiza peticiones HTTP a servidores remotos (descargas, APIs)
+# - json: Facilita trabajar con respuestas JSON automáticamente
+# - Usado para descargar archivos de Minecraft, consultar servidores, APIs
 reqwest = { version = "0.12", features = ["json"] }
+
+# ════════════════════════════════════════════════════════════════
+# Runtime Asincrónico
+# ════════════════════════════════════════════════════════════════
+# tokio (v1.40): Runtime asincrónico multiplataforma más popular
+# - Permite ejecutar múltiples operaciones no bloqueantes simultáneamente
+# - full: Habilita todas las características (timers, I/O, networking, sincronización)
+# - Necesario para que reqwest y otras operaciones async funcionen correctamente
 tokio = { version = "1.40", features = ["full"] }
+
+# ════════════════════════════════════════════════════════════════
+# Utilidades del Sistema
+# ════════════════════════════════════════════════════════════════
+# dirs (v5.0): Ubicación de directorios estándar del sistema operativo
+# - Proporciona rutas a directorios como home, documentos, descargas, configuración
+# - Multiplataforma: Funciona correctamente en Windows, macOS, Linux
+# - Usado para guardar datos del launcher, configuraciones, instancias de Minecraft
 dirs = "5.0"
+
+# uuid (v1.10): Generación de identificadores únicos universales
+# - Crea UUIDs (Identificadores Únicos Universales) aleatorios
+# - v4: Genera UUIDs de versión 4 (basados en números aleatorios)
+# - Utilizado para identificar sesiones, descargas, instancias del launcher
 uuid = { version = "1.10", features = ["v4"] }
 
+# Características especiales del proyecto
 [features]
+# Características por defecto cuando se compila el proyecto
 default = ["custom-protocol"]
+# custom-protocol: Habilita protocolos personalizados en Tauri
+# - Permite que el launcher maneje URLs especiales como "minecraft://..."
+# - Útil para integración con navegador web
 custom-protocol = ["tauri/custom-protocol"]
